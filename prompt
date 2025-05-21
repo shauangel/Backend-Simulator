@@ -1,0 +1,6 @@
+framework: Flask
+endpoint: /tasks
+model:
+  - title:str
+  - due_date:date
+  - is_done:bool
