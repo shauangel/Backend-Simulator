@@ -1,6 +1,5 @@
 import json
 import random
-import re
 from faker import Faker
 
 fake = Faker()
@@ -38,5 +37,5 @@ def fake_value(name, typ):
 
 if __name__ == "__main__":
     test = {"title": "str", "due_date": "date", "is_done": "bool"}
-    f = generate_fake_data(test)
+    f = generate_fake(test)
     print(f)

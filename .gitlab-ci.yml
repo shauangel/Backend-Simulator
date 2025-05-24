@@ -1,0 +1,31 @@
+image: google/cloud-sdk:slim
+
+stages:
+  - deploy
+
+variables:
+  PROJECT_ID: plucky-haven-460514-g6
+  REGION: us-central1
+  SERVICE_NAME: backend-simulator
+  REPO_NAME: backend-simulator-repo
+  IMAGE_NAME: us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME
+
+before_script:
+  - echo "$GCP_SERVICE_KEY" > key.json
+  - gcloud auth activate-service-account --key-file=key.json
+  - gcloud config set project $PROJECT_ID
+  - gcloud auth configure-docker us-central1-docker.pkg.dev
+
+deploy:
+  stage: deploy
+  script:
+    - docker buildx create --use || true
+    - docker buildx build --platform linux/amd64 -t $SERVICE_NAME .
+    - docker tag $SERVICE_NAME $IMAGE_NAME
+    - docker push $IMAGE_NAME
+    - gcloud run deploy $SERVICE_NAME \
+        --image $IMAGE_NAME \
+        --platform managed \
+        --region $REGION \
+        --allow-unauthenticated \
+        --port 8000
