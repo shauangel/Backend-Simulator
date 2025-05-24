@@ -6,25 +6,20 @@ from faker import Faker
 fake = Faker()
 
 
-def generate_fake_data(prompt_path="prompt", output_path="tester/demo.json", n=10):
-    with open(prompt_path, 'r') as f:
-        prompt = f.read()
-        f.close()
+def generate_fake(data, output_path="tester/demo.json", n=10):
 
-    # Extract field definitions using regex (e.g., "title:str")
-    fields = re.findall(r'(\w+):(\w+)', prompt)
-    print(fields)
-
-    data = []
+    f_data = []
     for _ in range(n):
         entry = {}
-        for name, typ in fields:
+        for name, typ in data.items():
             entry[name] = fake_value(name, typ)
-        data.append(entry)
+        f_data.append(entry)
 
     with open(output_path, 'w') as f:
-        json.dump(data, f, indent=2)
+        json.dump(f_data, f, indent=2)
         f.close()
+
+    return f_data
 
 
 def fake_value(name, typ):
@@ -42,4 +37,6 @@ def fake_value(name, typ):
 
 
 if __name__ == "__main__":
-    generate_fake_data()
+    test = {"title": "str", "due_date": "date", "is_done": "bool"}
+    f = generate_fake_data(test)
+    print(f)

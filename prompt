@@ -1,6 +1,15 @@
-framework: Flask
-endpoint: /tasks
-model:
-  - title:str
-  - due_date:date
-  - is_done:bool
+Create a Flask-based REST API with the following specification:
+
+Endpoint:
+- /task
+  - Methods: GET, POST
+  - Data model:
+    - title: string
+    - due_date: date (YYYY-MM-DD)
+    - is_done: boolean
+
+Requirements:
+- Use Flask and SQLAlchemy for the API.
+- Include Swagger documentation using the flasgger library.
+- Add YAML-style docstrings for each endpoint to support Swagger UI.
+- Ensure the API is functional and uses appropriate HTTP status codes.
