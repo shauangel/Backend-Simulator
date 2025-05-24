@@ -29,6 +29,6 @@ deploy:
     - docker build -t $SERVICE_NAME .
     - docker tag $SERVICE_NAME $IMAGE_NAME
     - docker push $IMAGE_NAME
-    - gcloud run deploy $SERVICE_NAME --image $IMAGE_NAME --platform managed --region $REGION --allow-unauthenticated --port 8000
+    - gcloud run deploy $SERVICE_NAME --image $IMAGE_NAME --platform managed --region $REGION --allow-unauthenticated --port 8000 --set-env-vars GENAI_API_KEY=$GENAI_API_KEY
   only:
     - main
