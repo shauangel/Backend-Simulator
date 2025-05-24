@@ -1,3 +1,4 @@
+import os
 import json
 import random
 from faker import Faker
@@ -5,13 +6,19 @@ from faker import Faker
 fake = Faker()
 
 
-def generate_fake(data, n=10):
+def generate_fake(data, n=10, path="tester", filename="data.json"):
     f_data = []
     for _ in range(n):
         entry = {}
         for name, typ in data.items():
             entry[name] = fake_value(name, typ)
         f_data.append(entry)
+
+    os.makedirs(path, exist_ok=True)
+
+    with open(os.path.join(path, filename), 'w') as f:
+        json.dump(f_data, f)
+        f.close()
 
     return f_data
 

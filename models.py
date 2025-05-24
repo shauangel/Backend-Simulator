@@ -34,10 +34,14 @@ def generate_framework(setup):
     return response.text
 
 
-def parse_code(text, path="tester/", filename="apis.py"):
+def parse_code(text, path="tester", filename="apis.py"):
     match = re.search(r"```python(.*?)```", text, re.DOTALL)
     code = match.group(1).strip() if match else ""
-    with open(path+filename, 'w') as f:
+
+    # Ensure the directory exists
+    os.makedirs(path, exist_ok=True)
+
+    with open(os.path.join(path, filename), 'w') as f:
         f.write(code)
         f.close()
 
