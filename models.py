@@ -7,14 +7,13 @@ with open("keys", "r") as f:
 
 
 def generate_framework(setup):
-    prompt = (f"Create a {setup['framework']} RESTAPI with the following specification: \n\n"
-              f"Endpoints \n")
+    prompt = "Create a " + setup['framework'] + "RESTAPI with the following specification: \n\nEndpoints \n"
     for e in setup['endpoints']:
-        prompt += (f"- /{e['name']}: \n"
-                   f"  - Methods: {", ".join(e['method'])}\n"
-                   f"  - Fields: \n")
+        prompt += ("- /{e['name']}: \n" +
+                   "  - Methods: " + ", ".join(e['method']) + "\n" +
+                   "  - Fields: \n")
         for k, v in e['field'].items():
-            prompt += f"    - {k}: {v}\n"
+            prompt += "    - " + k + ": " + v + "\n"
     prompt += "\nAdd Swagger. Use flask_swagger_ui for Swagger with flask. Use sqlalchemy for database."
 
     print(prompt)
