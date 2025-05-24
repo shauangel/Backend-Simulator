@@ -11,8 +11,7 @@ variables:
   IMAGE_NAME: us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME
 
 before_script:
-  - echo "$GCP_SERVICE_KEY" > key.json
-  - gcloud auth activate-service-account --key-file=key.json
+  - gcloud auth activate-service-account --key-file="$GCP_SERVICE_KEY"
   - gcloud config set project $PROJECT_ID
   - gcloud auth configure-docker us-central1-docker.pkg.dev
 
