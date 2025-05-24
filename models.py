@@ -1,9 +1,16 @@
 from google import genai
 from google.genai.types import HttpOptions
 import re
-with open("keys", "r") as f:
-    api_key = f.readline()
-    f.close()
+import os
+
+api_key = os.environ.get("GENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("Missing Gemini API key!")
+
+
+# with open("keys", "r") as f:
+#     api_key = f.readline()
+#     f.close()
 
 
 def generate_framework(setup):
