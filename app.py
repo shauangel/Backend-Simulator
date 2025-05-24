@@ -1,19 +1,12 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, Body
+from fastapi.responses import FileResponse
 from typing import Dict
-from fastapi import Body
-from models import generate_framework, parse_code
+from models import generate_framework, parse_code, pack_result
 from fake_data import generate_fake
 import uvicorn
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Or use your domain(s)
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
 
 @app.post("/generate-api")
 def generate_api(payload: Dict = Body(...)):
@@ -24,7 +17,7 @@ def generate_api(payload: Dict = Body(...)):
     resp = generate_framework(payload)
 
     # Parse and save generated code
-    parse_code(resp, filename='test_local.py')
+    parse_code(resp)
 
     return {"status": "success", "message": "API code generated"}
 
@@ -34,6 +27,19 @@ def generate_fake_data(payload: Dict = Body(...)):
     # Call your fake_data module
     f = generate_fake(payload)
     return {"data": f}
+
+
+@app.get("/download")
+def download():
+    try:
+        pack_result()
+    except FileNotFoundError:
+        return HTTPException(status_code=404, detail="Result directory not found.")
+    return FileResponse(
+        path="/tmp/result.zip",
+        filename="backend_result.zip",
+        media_type="application/zip"
+    )
 
 
 @app.get("/hello")

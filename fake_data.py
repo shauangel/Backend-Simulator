@@ -6,7 +6,7 @@ from faker import Faker
 fake = Faker()
 
 
-def generate_fake(data, n=10, path="tester", filename="data.json"):
+def generate_fake(data, n=10, path="result", filename="data.json"):
     f_data = []
     for _ in range(n):
         entry = {}

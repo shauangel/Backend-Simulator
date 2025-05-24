@@ -1,7 +1,6 @@
 from google import genai
 from google.genai.types import HttpOptions
-import re
-import os
+import re, os, zipfile
 
 api_key = os.environ.get("GENAI_API_KEY")
 if not api_key:
@@ -34,7 +33,7 @@ def generate_framework(setup):
     return response.text
 
 
-def parse_code(text, path="tester", filename="apis.py"):
+def parse_code(text, path="result", filename="main.py"):
     match = re.search(r"```python(.*?)```", text, re.DOTALL)
     code = match.group(1).strip() if match else ""
 
@@ -45,6 +44,23 @@ def parse_code(text, path="tester", filename="apis.py"):
         f.write(code)
         f.close()
 
+    return code
+
+
+def pack_result(path="result"):
+    zip_path = "/tmp/result.zip"
+
+    # Check if result directory exists
+    if not os.path.exists(path):
+        raise FileNotFoundError
+
+    # Create zip archive from result directory
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                arcname = os.path.relpath(file_path, start=path)  # keeps folder structure
+                zipf.write(file_path, arcname=arcname)
 
 # if __name__ == "__main__":
     # with open("prompt", 'r') as f:
