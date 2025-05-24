@@ -1,17 +1,28 @@
-image: google/cloud-sdk:slim
+image: docker:20.10.24
 
-stages:
-  - deploy
+services:
+  - docker:dind
 
 variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
   PROJECT_ID: plucky-haven-460514-g6
   REGION: us-central1
   SERVICE_NAME: backend-simulator
   REPO_NAME: backend-simulator-repo
   IMAGE_NAME: us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME
 
+stages:
+  - deploy
+
 before_script:
-  - gcloud auth activate-service-account --key-file="$GCP_SERVICE_KEY"
+  - apk add --no-cache curl python3 py3-pip bash
+  - pip install --upgrade pip
+  - pip install google-cloud-sdk
+  - echo "$GCP_SERVICE_KEY" > key.json
+  - curl -sSL https://sdk.cloud.google.com | bash
+  - source "$HOME/google-cloud-sdk/path.bash.inc"
+  - gcloud auth activate-service-account --key-file=key.json
   - gcloud config set project $PROJECT_ID
   - gcloud auth configure-docker us-central1-docker.pkg.dev
 
