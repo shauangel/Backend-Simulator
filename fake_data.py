@@ -5,18 +5,13 @@ from faker import Faker
 fake = Faker()
 
 
-def generate_fake(data, output_path="tester/demo.json", n=10):
-
+def generate_fake(data, n=10):
     f_data = []
     for _ in range(n):
         entry = {}
         for name, typ in data.items():
             entry[name] = fake_value(name, typ)
         f_data.append(entry)
-
-    with open(output_path, 'w') as f:
-        json.dump(f_data, f, indent=2)
-        f.close()
 
     return f_data
 

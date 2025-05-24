@@ -4,9 +4,16 @@ from fastapi import Body
 from models import generate_framework, parse_code
 from fake_data import generate_fake
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or use your domain(s)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/generate-api")
 def generate_api(payload: Dict = Body(...)):
