@@ -28,3 +28,5 @@ deploy:
         --region $REGION \
         --allow-unauthenticated \
         --port 8000
+  only:
+    - main
