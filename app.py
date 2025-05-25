@@ -1,12 +1,19 @@
 from fastapi import FastAPI, Request, HTTPException, Body
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 from models import generate_framework, parse_code, pack_result
 from fake_data import generate_fake
 import uvicorn
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Open to all — for testing
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/generate-api")
 def generate_api(payload: Dict = Body(...)):

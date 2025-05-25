@@ -1,8 +1,6 @@
 from models import generate_framework, parse_code
-from fake_data import generate_fake_data
+from fake_data import generate_fake
 
-import json
-import re
 
 if __name__ == "__main__":
     # Setup prompts
